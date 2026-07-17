@@ -3,15 +3,378 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulado - Legislação Institucional</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Simulado Avançado - Marketing Pessoal e Institucional (PMPR)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            color: #1a3c6e;
+            border-bottom: 3px solid #1a3c6e;
+            padding-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin: 10px 0 20px 0;
+            font-size: 16px;
+        }
+
+        .subtitle strong {
+            color: #1a3c6e;
+        }
+
+        .subtitle .nivel {
+            display: inline-block;
+            background: #dc3545;
+            color: #fff;
+            padding: 2px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-left: 8px;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #eef2f7;
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stats-bar span {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1a3c6e;
+        }
+
+        .stats-bar .badge {
+            background: #1a3c6e;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .questao {
+            background: #f8faff;
+            border: 1px solid #dde4f0;
+            border-radius: 10px;
+            padding: 18px 20px 12px 20px;
+            margin: 16px 0;
+            transition: background 0.2s;
+        }
+
+        .questao.correta {
+            background: #e6f7e6;
+            border-color: #28a745;
+        }
+
+        .questao.errada {
+            background: #fde8e8;
+            border-color: #dc3545;
+        }
+
+        .questao .pergunta {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #1a2a4a;
+            line-height: 1.5;
+        }
+
+        .questao .tema {
+            display: inline-block;
+            font-size: 10px;
+            background: #1a3c6e;
+            color: #fff;
+            padding: 2px 12px;
+            border-radius: 20px;
+            margin-left: 10px;
+            font-weight: normal;
+            letter-spacing: 0.3px;
+        }
+
+        .questao .tipo {
+            display: inline-block;
+            font-size: 10px;
+            background: #6c757d;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-left: 6px;
+            font-weight: normal;
+        }
+
+        .questao .tipo.vf {
+            background: #17a2b8;
+        }
+
+        .questao .tipo.me {
+            background: #6f42c1;
+        }
+
+        .questao .dificuldade {
+            display: inline-block;
+            font-size: 10px;
+            background: #fd7e14;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-left: 6px;
+            font-weight: normal;
+        }
+
+        .alternativas {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .alternativa {
+            background: #fff;
+            border: 2px solid #d0d7e6;
+            border-radius: 8px;
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 15px;
+        }
+
+        .alternativa:hover:not(.bloqueado) {
+            background: #eaf0fa;
+            border-color: #1a3c6e;
+        }
+
+        .alternativa.correta {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .alternativa.errada {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .alternativa.bloqueado {
+            cursor: default;
+            opacity: 0.9;
+        }
+
+        .alternativa .feedback {
+            display: none;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .alternativa.correta .feedback {
+            display: inline;
+            color: #28a745;
+        }
+
+        .alternativa.errada .feedback {
+            display: inline;
+            color: #dc3545;
+        }
+
+        .alternativa .label {
+            font-weight: bold;
+            color: #555;
+            margin-right: 6px;
+        }
+
+        .resultado {
+            background: #1a3c6e;
+            color: #fff;
+            padding: 16px 24px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            font-size: 18px;
+        }
+
+        .resultado .acertos {
+            background: #28a745;
+            padding: 6px 18px;
+            border-radius: 30px;
+        }
+
+        .resultado .erros {
+            background: #dc3545;
+            padding: 6px 18px;
+            border-radius: 30px;
+        }
+
+        .resultado .total {
+            background: #6c757d;
+            padding: 6px 18px;
+            border-radius: 30px;
+        }
+
+        .btn-reiniciar {
+            background: #ffc107;
+            color: #1a3c6e;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        .btn-reiniciar:hover {
+            background: #e0a800;
+            transform: scale(1.02);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .legenda-temas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin: 15px 0 20px 0;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .legenda-temas span {
+            font-size: 11px;
+            background: #1a3c6e;
+            color: #fff;
+            padding: 3px 12px;
+            border-radius: 20px;
+        }
+
+        .progress-container {
+            background: #e9ecef;
+            border-radius: 20px;
+            height: 10px;
+            margin: 10px 0 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #28a745;
+            border-radius: 20px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .dica {
+            font-size: 12px;
+            color: #6c757d;
+            font-style: italic;
+            margin-top: 4px;
+            padding: 4px 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .questao.correta .dica,
+        .questao.errada .dica {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            .resultado {
+                flex-direction: column;
+                gap: 8px;
+                font-size: 16px;
+            }
+            .alternativa {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+            .legenda-temas span {
+                font-size: 9px;
+                padding: 2px 8px;
+            }
+            .stats-bar {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .questao .pergunta {
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
 
-        <h1>📝 SIMULADO - LEGISLAÇÃO INSTITUCIONAL PM-PR</h1>
-        <p class="subtitle"><strong>Questões de Estudo</strong></p>
-        <p class="subtitle">30 questões de múltipla escolha - Clique na alternativa para responder</p>
+        <h1>📝 SIMULADO AVANÇADO</h1>
+        <p class="subtitle"><strong>Marketing Pessoal e Institucional - PMPR</strong></p>
+        <p class="subtitle">35 questões de alto nível • 20 V/F + 15 Múltipla Escolha <span class="nivel">⭐ NÍVEL AVANÇADO</span></p>
+        <p class="subtitle" style="font-size:14px; color:#6c757d;">Questões que integram autores, conceitos e análises críticas</p>
+
+        <div class="legenda-temas">
+            <span>📌 Fundamentos</span>
+            <span>🏛️ Institucional</span>
+            <span>🗺️ Etiqueta</span>
+            <span>⚖️ Valores</span>
+            <span>📋 Comunicação</span>
+            <span>📊 Marketing Digital</span>
+            <span>👮 Conduta</span>
+            <span>📜 Diretrizes</span>
+            <span>🧠 Integração</span>
+        </div>
+
+        <div class="stats-bar">
+            <span>📊 Progresso: <span id="progresso-texto">0/35</span></span>
+            <span>✅ Acertos: <span id="acertos-parcial">0</span></span>
+            <span>❌ Erros: <span id="erros-parcial">0</span></span>
+            <span class="badge">🎯 Respondidas: <span id="respondidas-parcial">0</span></span>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
 
         <div id="questoes-container"></div>
 
@@ -27,6 +390,620 @@
 
     </div>
 
-    <script src="main.js"></script>
+    <script>
+        // ================================================================
+        //  DADOS DAS 35 QUESTÕES DE NÍVEL AVANÇADO
+        //  20 V/F + 15 Múltipla Escolha
+        //  Integrando autores, conceitos e análise crítica
+        // ================================================================
+        var questoesData = [
+            // ============================================================
+            //  V/F 1-5: FUNDAMENTOS AVANÇADOS
+            // ============================================================
+            {
+                id: 1,
+                tema: "Fundamentos",
+                pergunta: "A intersecção entre a visão de Bordin (construção da imagem em 10 etapas) e a de Kotler (criação de valor) sugere que o marketing pessoal na PMPR deve priorizar a autopromoção em detrimento da construção de credibilidade institucional.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 1,
+                isVF: true,
+                dica: "Bordin e Kotler convergem para a construção de valor e credibilidade, não para autopromoção."
+            },
+            {
+                id: 2,
+                tema: "Fundamentos",
+                pergunta: "Enquanto Rizzo enfatiza a percepção da imagem como estratégia, Silveira aborda a etiqueta como norma cultural; ambos, porém, convergem ao reconhecerem que a postura profissional transcende a mera aparência e se insere em um campo simbólico de reconhecimento social.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 0,
+                isVF: true,
+                dica: "Ambos os autores reconhecem a dimensão simbólica e estratégica da postura profissional."
+            },
+            {
+                id: 3,
+                tema: "Fundamentos",
+                pergunta: "A aplicação dos 4Ps do marketing (Produto, Preço, Praça, Promoção) no contexto da PMPR, conforme o material, estabelece que o 'Preço' corresponde ao valor monetário do serviço prestado pelo militar à comunidade.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 1,
+                isVF: true,
+                dica: "O 'Preço' refere-se à percepção de valor, credibilidade e confiança, não ao valor monetário."
+            },
+            {
+                id: 4,
+                tema: "Fundamentos",
+                pergunta: "A teoria do marketing de relacionamento, proposta por Kotler, quando aplicada ao contexto militar, implica que a confiança da sociedade na PMPR é construída a partir de interações consistentes e do cumprimento das expectativas geradas pela imagem institucional.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 0,
+                isVF: true,
+                dica: "Kotler defende que o valor e o relacionamento geram confiança, o que se aplica diretamente à PMPR."
+            },
+            {
+                id: 5,
+                tema: "Fundamentos",
+                pergunta: "Segundo a abordagem integrada do material, o marketing pessoal na PMPR pode ser compreendido como uma dialética entre a construção da autoimagem (Bordin) e a percepção externa (Rizzo), na qual a coerência entre esses dois polos é condição para a legitimidade profissional.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 0,
+                isVF: true,
+                dica: "A coerência entre autoimagem e percepção externa é fundamental para a legitimidade."
+            },
+
+            // ============================================================
+            //  V/F 6-10: INSTITUCIONAL E VALORES AVANÇADOS
+            // ============================================================
+            {
+                id: 6,
+                tema: "Institucional",
+                pergunta: "A visão estratégica da PMPR para 2025-2027, ao estabelecer como objetivo 'fortalecer a imagem institucional', contradiz o princípio da impessoalidade da Administração Pública, pois personaliza a atuação do Estado.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 1,
+                isVF: true,
+                dica: "Fortalecer a imagem institucional não viola a impessoalidade, desde que mantido o foco na instituição, não em pessoas."
+            },
+            {
+                id: 7,
+                tema: "Institucional",
+                pergunta: "A sinergia entre marketing pessoal e institucional, defendida no material, pressupõe que a conduta individual do militar é um vetor de comunicação que pode tanto fortalecer quanto fragilizar a credibilidade da corporação, em um processo de retroalimentação contínua.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 0,
+                isVF: true,
+                dica: "A conduta individual afeta diretamente a imagem institucional em um processo de retroalimentação."
+            },
+            {
+                id: 8,
+                tema: "Valores",
+                pergunta: "Os valores não compartilhados entre marketing pessoal e institucional — como individualidade e autopromoção — quando priorizados pelo militar, podem gerar um conflito de lealdades que compromete a disciplina e a hierarquia, conforme previsto no RDE.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 0,
+                isVF: true,
+                dica: "A priorização de valores individuais em detrimento dos institucionais gera conflito e compromete a disciplina."
+            },
+            {
+                id: 9,
+                tema: "Valores",
+                pergunta: "A 'preservação da imagem como dever funcional', mencionada no material, estabelece uma relação de dependência recíproca entre a honra militar individual e a reputação coletiva da corporação, criando um vínculo que transcende o aspecto meramente disciplinar.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 0,
+                isVF: true,
+                dica: "A preservação da imagem é um dever que conecta honra individual e reputação coletiva."
+            },
+            {
+                id: 10,
+                tema: "Valores",
+                pergunta: "A ética da responsabilidade, implícita no material, sugere que o militar deve pautar sua conduta privada pelos mesmos princípios que orientam sua atuação profissional, pois a confiança pública não distingue entre as esferas pública e privada do agente do Estado.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 0,
+                isVF: true,
+                dica: "A confiança pública é indivisível e exige coerência entre conduta pública e privada."
+            },
+
+            // ============================================================
+            //  V/F 11-15: ETIQUETA E COMUNICAÇÃO AVANÇADOS
+            // ============================================================
+            {
+                id: 11,
+                tema: "Etiqueta",
+                pergunta: "A evolução histórica da etiqueta, desde as cortes absolutistas até sua aplicação nas organizações modernas, revela que sua função primordial sempre foi a de estabelecer distinção de classes, o que a torna inadequada para instituições democráticas como a PMPR.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 1,
+                isVF: true,
+                dica: "A etiqueta moderna evoluiu para promover harmonia e eficiência, não distinção de classes."
+            },
+            {
+                id: 12,
+                tema: "Etiqueta",
+                pergunta: "A preponderância da comunicação não-verbal sobre a verbal, conforme sugerido por Kalil e outros autores, implica que a postura corporal do policial militar durante uma abordagem pode transmitir mais informações sobre sua autoridade e confiabilidade do que o conteúdo de sua fala.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 0,
+                isVF: true,
+                dica: "A comunicação não-verbal é preponderante e transmite autoridade e confiabilidade."
+            },
+            {
+                id: 13,
+                tema: "Comunicação",
+                pergunta: "O Manual de Comunicação Social da PMPR, ao estabelecer que 'todo policial militar é um agente de comunicação social', fundamenta-se na premissa de que a comunicação institucional não se restringe aos canais oficiais, mas se realiza em cada interação do militar com a sociedade.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 0,
+                isVF: true,
+                dica: "A comunicação institucional ocorre em toda interação do militar com a sociedade."
+            },
+            {
+                id: 14,
+                tema: "Comunicação",
+                pergunta: "A exigência de autorização formal para participação em podcasts e entrevistas, prevista no material, representa uma restrição desproporcional à liberdade de expressão do militar, uma vez que sua opinião pessoal não se confunde com a posição institucional.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 1,
+                isVF: true,
+                dica: "A autorização é necessária para alinhamento com diretrizes institucionais, não sendo desproporcional."
+            },
+            {
+                id: 15,
+                tema: "Etiqueta",
+                pergunta: "A etiqueta contemporânea, conforme Kalil, fundamenta-se na arte de fazer as pessoas se sentirem confortáveis, o que, no contexto policial, pode ser interpretado como uma estratégia de desarmamento simbólico que antecede e facilita a abordagem operacional.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 0,
+                isVF: true,
+                dica: "A etiqueta como estratégia de conforto pode facilitar a abordagem operacional."
+            },
+
+            // ============================================================
+            //  V/F 16-20: MARKETING DIGITAL E CONDUTA AVANÇADOS
+            // ============================================================
+            {
+                id: 16,
+                tema: "Marketing Digital",
+                pergunta: "A Portaria CG nº 1220/2022, ao vedar a divulgação de informações sigilosas, estabelece uma fronteira ética que, no ambiente digital, se torna ainda mais crítica devido à perenidade e à amplificação das informações, criando riscos à segurança operacional e à imagem institucional.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 0,
+                isVF: true,
+                dica: "A perenidade digital amplifica os riscos à segurança e à imagem institucional."
+            },
+            {
+                id: 17,
+                tema: "Marketing Digital",
+                pergunta: "A proibição de marcação de perfis particulares em postagens institucionais, estabelecida pelo Memorando nº 0049/2025, visa preservar a impessoalidade da comunicação oficial, mas pode ser interpretada como uma limitação à valorização do trabalho individual dos policiais.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 0,
+                isVF: true,
+                dica: "A medida visa preservar a impessoalidade, embora possa gerar essa interpretação."
+            },
+            {
+                id: 18,
+                tema: "Marketing Digital",
+                pergunta: "O uso de IA para exemplificar casos de exposição inadequada, mencionado no material, sugere que a tecnologia pode ser empregada como ferramenta de prevenção, mas também evidencia a complexidade de distinguir entre a liberdade de expressão e o uso indevido da imagem institucional.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 0,
+                isVF: true,
+                dica: "A IA exemplifica a complexidade entre liberdade e uso indevido da imagem institucional."
+            },
+            {
+                id: 19,
+                tema: "Conduta",
+                pergunta: "A responsabilização disciplinar do militar por condutas inadequadas em redes sociais, prevista no material, fundamenta-se na teoria do 'dever de vigilância', que estabelece que o agente público deve antecipar as consequências de seus atos sobre a confiança depositada pela sociedade na instituição.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 0,
+                isVF: true,
+                dica: "O 'dever de vigilância' exige que o militar antecipe as consequências de seus atos."
+            },
+            {
+                id: 20,
+                tema: "Conduta",
+                pergunta: "O princípio da hierarquia e disciplina militar, quando confrontado com a liberdade de expressão nas redes sociais, impõe ao militar uma restrição absoluta de manifestação pública, mesmo em perfis pessoais, sob pena de transgressão disciplinar.",
+                alternativas: ["Verdadeiro", "Falso"],
+                correta: 1,
+                isVF: true,
+                dica: "A restrição não é absoluta, mas exige que o militar observe os valores e deveres éticos."
+            },
+
+            // ============================================================
+            //  M.E. 21-25: FUNDAMENTOS E INSTITUCIONAL AVANÇADOS
+            // ============================================================
+            {
+                id: 21,
+                tema: "Fundamentos",
+                pergunta: "Considerando a intersecção entre a teoria dos 4Ps (Kotler) e as 10 etapas de Bordin para construção da imagem, qual alternativa representa uma síntese correta dessas abordagens no contexto da PMPR?",
+                alternativas: [
+                    "O 'Produto' (competências) deve ser desenvolvido antes do 'Preço' (percepção de valor), e ambos antecedem a 'Promoção' (comunicação), conforme a ordem lógica de Bordin.",
+                    "A 'Praça' (ambiente de atuação) é o único elemento que não se relaciona com as etapas de Bordin, pois depende exclusivamente da estrutura organizacional.",
+                    "A 'Promoção' (comunicação da imagem) corresponde à etapa de 'Credibilidade' de Bordin, enquanto o 'Preço' corresponde ao 'Relacionamento'.",
+                    "A 'Praça' (ambiente) e a 'Promoção' (comunicação) são interdependentes, pois a percepção da imagem do militar é influenciada tanto pelo contexto de atuação quanto pela forma como ele se comunica.",
+                    "O 'Preço' (percepção de valor) é determinado unicamente pelo 'Produto' (competências), independentemente da 'Promoção' (comunicação)."
+                ],
+                correta: 3,
+                dica: "Praça e Promoção são interdependentes na construção da percepção da imagem."
+            },
+            {
+                id: 22,
+                tema: "Fundamentos",
+                pergunta: "A relação entre a teoria do marketing de relacionamento (Kotler) e o conceito de 'confiança social' no contexto da PMPR pode ser compreendida como:",
+                alternativas: [
+                    "Um processo linear em que a confiança é gerada exclusivamente pela eficiência operacional, independentemente da comunicação.",
+                    "Uma via de mão dupla na qual a confiança é construída por meio de interações consistentes e do cumprimento das promessas implícitas na imagem institucional.",
+                    "Um fenômeno que depende unicamente da mídia, pois a população forma sua percepção a partir das notícias veiculadas.",
+                    "Uma estratégia de curto prazo baseada em campanhas publicitárias pontuais.",
+                    "Um conceito que se aplica apenas ao setor privado, não sendo relevante para instituições públicas."
+                ],
+                correta: 1,
+                dica: "A confiança é construída por interações consistentes e cumprimento de promessas institucionais."
+            },
+            {
+                id: 23,
+                tema: "Institucional",
+                pergunta: "A missão da PMPR ('Proteger vidas, fazer cumprir a lei, prevenir e combater o crime, promovendo a ordem e a segurança') e a visão estratégica ('Ser uma instituição policial moderna e inovadora, com excelência na promoção da segurança pública, inspirando confiança na população paranaense') estabelecem uma relação de:",
+                alternativas: [
+                    "Contradição, pois a missão é operacional enquanto a visão é meramente aspiracional e desconectada da realidade.",
+                    "Complementaridade, na qual a missão define o propósito fundamental e a visão orienta o direcionamento estratégico para fortalecer a confiança social.",
+                    "Independência, pois a missão é estática e imutável, enquanto a visão pode ser alterada anualmente sem afetar a identidade da instituição.",
+                    "Subordinação, já que a visão estratégica deve ser revista sempre que a missão for cumprida.",
+                    "Conflito, pois uma instituição que atua com uso da força não pode, simultaneamente, inspirar confiança."
+                ],
+                correta: 1,
+                dica: "Missão e visão são complementares: propósito fundamental e direcionamento estratégico."
+            },
+            {
+                id: 24,
+                tema: "Institucional",
+                pergunta: "O fortalecimento da imagem institucional, enquanto objetivo estratégico da PMPR, relaciona-se com o marketing pessoal do militar na medida em que:",
+                alternativas: [
+                    "A imagem institucional é construída exclusivamente pelo comando, sendo a conduta individual irrelevante para esse processo.",
+                    "O militar, como representante do Estado, atua como um 'touchpoint' da marca institucional, e sua conduta individual molda diretamente a percepção pública.",
+                    "O marketing pessoal visa apenas a promoção individual, enquanto o institucional foca na organização, não havendo intersecção.",
+                    "A conduta individual só afeta a imagem institucional quando o militar está de uniforme e em serviço ativo.",
+                    "O fortalecimento da imagem institucional depende unicamente da atuação da Assessoria de Comunicação Social."
+                ],
+                correta: 1,
+                dica: "O militar é um 'touchpoint' da marca institucional e sua conduta molda a percepção pública."
+            },
+            {
+                id: 25,
+                tema: "Valores",
+                pergunta: "A distinção entre valores compartilhados e não compartilhados entre marketing pessoal e institucional revela que:",
+                alternativas: [
+                    "Valores não compartilhados (como individualidade e autopromoção) podem ser prejudiciais quando priorizados, pois geram conflito com a padronização e a disciplina institucionais.",
+                    "Valores não compartilhados são irrelevantes, pois o marketing pessoal e o institucional atuam em esferas totalmente separadas.",
+                    "A individualidade é um valor que deve ser incentivado, pois fortalece a criatividade e a inovação dentro da corporação.",
+                    "A autopromoção é permitida desde que o militar mencione a corporação em suas publicações.",
+                    "Valores compartilhados como disciplina e respeito são importantes apenas para o marketing institucional, não para o pessoal."
+                ],
+                correta: 0,
+                dica: "Valores não compartilhados geram conflito com a padronização e disciplina institucionais."
+            },
+
+            // ============================================================
+            //  M.E. 26-30: ETIQUETA E COMUNICAÇÃO AVANÇADOS
+            // ============================================================
+            {
+                id: 26,
+                tema: "Etiqueta",
+                pergunta: "A etiqueta social, no contexto militar, pode ser compreendida como um mecanismo de:",
+                alternativas: [
+                    "Hierarquização rígida que limita a autonomia do militar e reduz sua capacidade de adaptação a situações imprevistas.",
+                    "Padronização comportamental que, além de reforçar a disciplina, atua como estratégia de redução de incertezas nas interações sociais.",
+                    "Formalidade excessiva que entrava a comunicação eficaz com a comunidade.",
+                    "Conjunto de regras estáticas que não acompanham a evolução das relações sociais contemporâneas.",
+                    "Mecanismo de exclusão social que distancia a PMPR da população."
+                ],
+                correta: 1,
+                dica: "A etiqueta atua como padronização que reduz incertezas e reforça a disciplina."
+            },
+            {
+                id: 27,
+                tema: "Etiqueta",
+                pergunta: "A afirmativa de Kalil de que 'a etiqueta moderna é a arte de fazer as pessoas se sentirem confortáveis', quando aplicada ao atendimento policial, sugere que:",
+                alternativas: [
+                    "O policial deve priorizar o conforto do cidadão em detrimento da segurança e da aplicação da lei.",
+                    "A abordagem policial deve equilibrar a autoridade legítima com a empatia, criando um ambiente de confiança que facilita a interação.",
+                    "O conforto do cidadão é irrelevante, pois a autoridade policial dispensa qualquer preocupação com a percepção pública.",
+                    "O policial deve agir com extrema rigidez para demonstrar autoridade, independentemente do conforto do cidadão.",
+                    "A etiqueta se aplica apenas a eventos sociais, não a situações de atendimento policial."
+                ],
+                correta: 1,
+                dica: "A abordagem deve equilibrar autoridade legítima com empatia para criar confiança."
+            },
+            {
+                id: 28,
+                tema: "Comunicação",
+                pergunta: "A premissa de que 'todo policial militar é um agente de comunicação social' implica que:",
+                alternativas: [
+                    "A comunicação institucional deve ser centralizada e controlada exclusivamente pela Assessoria de Comunicação da PMPR.",
+                    "Cada interação do militar com a sociedade é uma oportunidade de fortalecimento ou fragilização da imagem institucional.",
+                    "O militar deve evitar qualquer forma de comunicação não institucional para não comprometer a imagem da corporação.",
+                    "A comunicação do militar deve se restringir a assuntos operacionais, excluindo qualquer interação social.",
+                    "A responsabilidade pela comunicação institucional é exclusiva dos oficiais, não se estendendo às praças."
+                ],
+                correta: 1,
+                dica: "Cada interação é uma oportunidade de fortalecimento ou fragilização da imagem institucional."
+            },
+            {
+                id: 29,
+                tema: "Comunicação",
+                pergunta: "A exigência de autorização para participação em podcasts e entrevistas, estabelecida pelo Manual de Comunicação Social, fundamenta-se na necessidade de:",
+                alternativas: [
+                    "Limitar a liberdade de expressão do militar, que deve se restringir ao ambiente interno da corporação.",
+                    "Garantir alinhamento com as diretrizes institucionais e prevenir exposições que possam comprometer a neutralidade e a imagem da PMPR.",
+                    "Impedir que o militar se torne uma figura pública, o que poderia gerar conflitos de interesse.",
+                    "Centralizar todas as informações sobre segurança pública no comando da PMPR.",
+                    "Evitar que o militar receba qualquer tipo de remuneração ou vantagem por suas participações."
+                ],
+                correta: 1,
+                dica: "A autorização garante alinhamento institucional e previne exposições inadequadas."
+            },
+            {
+                id: 30,
+                tema: "Etiqueta",
+                pergunta: "A relação entre a postura corporal e a percepção de autoridade legítima no contexto policial pode ser compreendida como:",
+                alternativas: [
+                    "Uma relação direta e linear, na qual uma postura mais rígida sempre resulta em maior percepção de autoridade.",
+                    "Uma relação complexa na qual a postura deve comunicar segurança e equilíbrio, sem transmitir arrogância ou insegurança, para gerar confiança.",
+                    "Uma relação irrelevante, pois a autoridade policial é determinada exclusivamente pela lei e pelo uniforme.",
+                    "Uma relação que se aplica apenas a situações de confronto, não a interações cotidianas.",
+                    "Uma relação que depende exclusivamente da cultura local, não sendo possível estabelecer parâmetros gerais."
+                ],
+                correta: 1,
+                dica: "A postura deve comunicar segurança e equilíbrio para gerar confiança."
+            },
+
+            // ============================================================
+            //  M.E. 31-35: MARKETING DIGITAL E CONDUTA AVANÇADOS
+            // ============================================================
+            {
+                id: 31,
+                tema: "Marketing Digital",
+                pergunta: "O Memorando nº 0049/2025, ao proibir a marcação de perfis particulares em postagens institucionais, estabelece uma distinção fundamental entre:",
+                alternativas: [
+                    "Comunicação oficial e comunicação não oficial, sendo que apenas a primeira deve ser responsabilidade da instituição.",
+                    "Imagem pessoal e imagem institucional, reafirmando que a comunicação oficial não deve ser personalizada.",
+                    "Conteúdo operacional e conteúdo administrativo, delimitando o escopo das publicações institucionais.",
+                    "Mídias sociais e meios de comunicação tradicionais, restringindo a atuação apenas a estes últimos.",
+                    "Publicações pagas e publicações orgânicas, determinando quais podem ser utilizadas pela instituição."
+                ],
+                correta: 1,
+                dica: "A proibição reafirma a distinção entre imagem pessoal e imagem institucional."
+            },
+            {
+                id: 32,
+                tema: "Marketing Digital",
+                pergunta: "A vedação ao uso de símbolos institucionais para promoção de produtos ou serviços, prevista no material, baseia-se no princípio da:",
+                alternativas: [
+                    "Impessoalidade da Administração Pública, que veda o uso da máquina estatal para fins particulares.",
+                    "Eficiência administrativa, que exige a otimização dos recursos institucionais.",
+                    "Publicidade, que determina a transparência de todos os atos administrativos.",
+                    "Hierarquia, que estabelece a subordinação de todos os atos ao comando superior.",
+                    "Legalidade, que exige autorização legislativa para qualquer uso de símbolos públicos."
+                ],
+                correta: 0,
+                dica: "A vedação baseia-se no princípio da impessoalidade da Administração Pública."
+            },
+            {
+                id: 33,
+                tema: "Conduta",
+                pergunta: "A responsabilização disciplinar do militar por condutas em redes sociais, conforme o material, pode ser compreendida como uma aplicação do princípio da:",
+                alternativas: [
+                    "Presunção de inocência, que protege o militar de qualquer sanção antes do julgamento.",
+                    "Unidade da doutrina militar, que estabelece a indivisibilidade da responsabilidade do militar.",
+                    "Independência funcional, que garante a autonomia do militar em suas manifestações pessoais.",
+                    "Hierarquia e disciplina, que impõem limites à conduta do militar em todas as esferas de sua vida.",
+                    "Liberdade de expressão, que deve ser absoluta e sem restrições."
+                ],
+                correta: 3,
+                dica: "A responsabilização baseia-se na hierarquia e disciplina militar."
+            },
+            {
+                id: 34,
+                tema: "Conduta",
+                pergunta: "A afirmação 'Sua imagem é o maior patrimônio da nossa instituição. Preserve-a com honra' sintetiza a ideia de que:",
+                alternativas: [
+                    "A imagem pessoal do militar é um ativo institucional que deve ser protegido, e sua preservação é um dever que transcende o interesse individual.",
+                    "A imagem institucional é construída exclusivamente pela cúpula da corporação, cabendo ao militar apenas cumprir ordens.",
+                    "A honra é um conceito abstrato que não se relaciona com a imagem profissional do militar.",
+                    "O patrimônio da instituição é material, não imaterial, sendo a imagem um aspecto secundário.",
+                    "A preservação da imagem é responsabilidade apenas da Assessoria de Comunicação Social."
+                ],
+                correta: 0,
+                dica: "A imagem pessoal do militar é um ativo institucional que deve ser preservado como dever."
+            },
+            {
+                id: 35,
+                tema: "Marketing Digital",
+                pergunta: "A utilização de IA para exemplificar casos de exposição inadequada, mencionada no material, evidencia que:",
+                alternativas: [
+                    "A tecnologia substituirá completamente a avaliação humana na gestão da imagem institucional.",
+                    "A tecnologia pode ser uma ferramenta auxiliar, mas a responsabilidade pela conduta digital permanece integralmente com o militar.",
+                    "A IA é incapaz de simular situações complexas, sendo seu uso no material meramente ilustrativo.",
+                    "As ferramentas de IA são proibidas para militares, pois geram riscos à segurança operacional.",
+                    "A IA pode gerar imagens e situações, mas não tem qualquer relação com a conduta real dos militares."
+                ],
+                correta: 1,
+                dica: "A IA é uma ferramenta auxiliar, mas a responsabilidade permanece com o militar."
+            }
+        ];
+
+        // ================================================================
+        //  ESTADO DA APLICAÇÃO
+        // ================================================================
+        var estado = {
+            respondidas: 0,
+            acertos: 0,
+            erros: 0,
+            bloqueadas: {}
+        };
+
+        var letras = ["A", "B", "C", "D", "E"];
+
+        // ================================================================
+        //  RENDERIZAR QUESTÕES
+        // ================================================================
+        function renderizarQuestoes() {
+            var container = document.getElementById("questoes-container");
+            container.innerHTML = "";
+
+            for (var q = 0; q < questoesData.length; q++) {
+                var questao = questoesData[q];
+                
+                var divQuestao = document.createElement("div");
+                divQuestao.className = "questao";
+                divQuestao.id = "questao-" + questao.id;
+
+                var pergunta = document.createElement("div");
+                pergunta.className = "pergunta";
+                
+                var tipoTexto = questao.isVF ? "V/F" : "M.E.";
+                var tipoClass = questao.isVF ? "vf" : "me";
+                pergunta.innerHTML = questao.id + ". " + questao.pergunta + 
+                    ' <span class="tema">' + questao.tema + '</span>' +
+                    ' <span class="tipo ' + tipoClass + '">' + tipoTexto + '</span>' +
+                    ' <span class="dificuldade">⭐ avançada</span>';
+                divQuestao.appendChild(pergunta);
+
+                var divAlt = document.createElement("div");
+                divAlt.className = "alternativas";
+
+                for (var i = 0; i < questao.alternativas.length; i++) {
+                    var alt = document.createElement("div");
+                    alt.className = "alternativa";
+                    alt.dataset.indice = i;
+                    alt.dataset.questaoId = questao.id;
+                    alt.id = "alt-" + questao.id + "-" + i;
+
+                    var label = document.createElement("span");
+                    label.className = "label";
+                    
+                    if (questao.isVF) {
+                        label.textContent = i === 0 ? "V)" : "F)";
+                    } else {
+                        label.textContent = letras[i] + ")";
+                    }
+                    
+                    alt.appendChild(label);
+
+                    var txt = document.createTextNode(" " + questao.alternativas[i]);
+                    alt.appendChild(txt);
+
+                    var feedback = document.createElement("span");
+                    feedback.className = "feedback";
+                    feedback.textContent = " ✓";
+                    alt.appendChild(feedback);
+
+                    alt.addEventListener("click", function(e) {
+                        var target = e.currentTarget;
+                        var questaoId = parseInt(target.dataset.questaoId);
+                        var indice = parseInt(target.dataset.indice);
+                        responderQuestao(questaoId, indice);
+                    });
+
+                    divAlt.appendChild(alt);
+                }
+
+                divQuestao.appendChild(divAlt);
+
+                // Dica explicativa (aparece após responder)
+                var dicaDiv = document.createElement("div");
+                dicaDiv.className = "dica";
+                if (questao.dica) {
+                    dicaDiv.textContent = "💡 " + questao.dica;
+                }
+                divQuestao.appendChild(dicaDiv);
+
+                container.appendChild(divQuestao);
+            }
+
+            atualizarResultado();
+        }
+
+        // ================================================================
+        //  RESPONDER QUESTÃO
+        // ================================================================
+        function responderQuestao(questaoId, indiceSelecionado) {
+            if (estado.bloqueadas[questaoId]) {
+                return;
+            }
+
+            var questao = null;
+            for (var q = 0; q < questoesData.length; q++) {
+                if (questoesData[q].id === questaoId) {
+                    questao = questoesData[q];
+                    break;
+                }
+            }
+            
+            if (!questao) return;
+
+            var isCorreta = (indiceSelecionado === questao.correta);
+
+            estado.bloqueadas[questaoId] = true;
+            estado.respondidas++;
+
+            if (isCorreta) {
+                estado.acertos++;
+            } else {
+                estado.erros++;
+            }
+
+            var divQuestao = document.getElementById("questao-" + questaoId);
+            if (isCorreta) {
+                divQuestao.className = "questao correta";
+            } else {
+                divQuestao.className = "questao errada";
+            }
+
+            var alternativas = divQuestao.querySelectorAll(".alternativa");
+            for (var i = 0; i < alternativas.length; i++) {
+                alternativas[i].classList.add("bloqueado");
+                if (i === questao.correta) {
+                    alternativas[i].classList.add("correta");
+                } else if (i === indiceSelecionado && !isCorreta) {
+                    alternativas[i].classList.add("errada");
+                }
+                alternativas[i].classList.remove("selecionada");
+            }
+
+            // Mostrar a dica
+            var dicaDiv = divQuestao.querySelector(".dica");
+            if (dicaDiv) {
+                dicaDiv.style.display = "block";
+            }
+
+            atualizarResultado();
+        }
+
+        // ================================================================
+        //  ATUALIZAR RESULTADO
+        // ================================================================
+        function atualizarResultado() {
+            document.getElementById("acertos").textContent = estado.acertos;
+            document.getElementById("erros").textContent = estado.erros;
+            document.getElementById("total").textContent = estado.respondidas;
+            
+            document.getElementById("acertos-parcial").textContent = estado.acertos;
+            document.getElementById("erros-parcial").textContent = estado.erros;
+            document.getElementById("respondidas-parcial").textContent = estado.respondidas;
+            document.getElementById("progresso-texto").textContent = estado.respondidas + "/" + questoesData.length;
+            
+            var total = questoesData.length;
+            var progresso = (estado.respondidas / total) * 100;
+            document.getElementById("progress-bar").style.width = progresso + "%";
+        }
+
+        // ================================================================
+        //  REINICIAR
+        // ================================================================
+        function reiniciar() {
+            estado = {
+                respondidas: 0,
+                acertos: 0,
+                erros: 0,
+                bloqueadas: {}
+            };
+            renderizarQuestoes();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        // ================================================================
+        //  INICIALIZAR
+        // ================================================================
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", renderizarQuestoes);
+        } else {
+            renderizarQuestoes();
+        }
+    </script>
 </body>
 </html>
